@@ -5,9 +5,14 @@ import { ProjectHeader } from "./ProjectHeader"
 import { NewChatInput } from "./NewChatInput"
 import { ProjectActions } from "./ProjectActions"
 import { ChatList } from "./ChatList"
+import { Navbar } from "./Navbar"
+import { Header } from "./Header"
+import styles from './styles/Navbar.module.css'
+import chatStyles from './styles/ChatInterface.module.css'
 
 export default function ChatInterface() {
   const [chatItems, setChatItems] = useState<ChatItem[]>([])
+  const [isNavCollapsed, setIsNavCollapsed] = useState(false)
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -18,11 +23,15 @@ export default function ChatInterface() {
   }, [])
 
   return (
-    <div className="max-w-3xl mx-auto p-4 space-y-4">
-      <ProjectHeader />
-      <NewChatInput />
-      <ProjectActions />
-      <ChatList chatItems={chatItems} />
-    </div>
+    <>
+      <Navbar onToggle={setIsNavCollapsed} />
+      <Header isNavCollapsed={isNavCollapsed} />
+      <main className={`${styles.mainContent} ${isNavCollapsed ? styles.shifted : ''}`}> 
+        <ProjectHeader />
+        <NewChatInput />
+        <ProjectActions />
+        <ChatList chatItems={chatItems} />
+      </main>
+    </>
   )
 }

@@ -1,0 +1,58 @@
+.container {
+  height: 100vh;
+  width: 80vw;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  /* Base styles */
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 1000;
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
+
+.chatList {
+  margin: 1rem;
+  width: 100%;
+  display: grid; /* Use grid layout */
+  grid-template-columns: repeat(2, 1fr); /* Two equal columns */
+  gap: 0.5rem; /* Space between items */
+  height: 40vh; /* Set a fixed height for scrolling */
+  overflow-y: auto; /* Enable vertical scrolling */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+.chatList::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}
+
+.chatCard {
+  padding: 1rem;
+  width: 35vw;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+  border-radius: 1rem;
+  transition: background-color 0.2s;
+}
+
+.chatCard:hover {
+  background-color: rgb(249, 250, 251);
+}
+
+.chatTitle {
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.chatPreview {
+  font-size: 0.875rem;
+  color: rgb(107, 114, 128);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -1,0 +1,56 @@
+.documentsList {
+  display: flex !important;
+  width: 30vw !important;
+  flex-direction: row !important;
+  justify-content: flex-start !important;
+}
+
+
+.documentsCard {
+  width: 32vw !important; /* Maintain size properties */
+  height: 8vh !important; /* Allow height to adjust based on content */
+  overflow: hidden !important;
+  display: flex !important; /* Ensure flexbox is used */
+  flex-direction: column !important; /* Column layout */
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.showAllButton {
+  font-size: 0.8rem; /* Very small font size */
+  color: #007bff; /* Blue color */
+  text-decoration: bold; /* Underlined to indicate clickability */
+  cursor: pointer; /* Hand cursor on hover */
+  width: fit-content; /* Align to content size */
+}
+
+.iconContainer {
+  height: 3vh;
+  width: 3vh;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  height: 2.5vh;
+  width: 2.5vh;
+  color: #4b5563;
+}
+
+.documentItem {
+  display: flex; /* Flex for alignment */
+  align-items: center; /* Center vertically */
+  justify-content: space-around; /* Center horizontally */
+  width: 9vw; /* Maintain size properties */
+  height: 5vh; /* Allow height to adjust based on content */
+  background-color: white; /* White background */
+  font-size: calc(0.6rem + 0.12vw); /* Small font size */
+  font-weight: 1000;
+  border-radius: 10px; /* Rounded corners */
+  padding: 0.5rem; /* Padding for spacing */
+  margin: 0.25rem; /* Margin between documents */
+  border: 1px solid #ccc; /* Border for definition */
+  cursor: pointer; /* Pointer on hover */
+}
