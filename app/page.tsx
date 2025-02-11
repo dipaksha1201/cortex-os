@@ -1,7 +1,8 @@
 "use client"
 
-import ChatInterface from "@/src/components/chat/ChatInterface"
+import { useComponentContext } from "@/src/components/global/ComponentContext"
 
 export default function SyntheticV0PageForDeployment() {
-  return <ChatInterface />
+  const { currentComponent } = useComponentContext();
+  return currentComponent;
 }

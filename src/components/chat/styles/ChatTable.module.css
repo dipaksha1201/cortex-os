@@ -1,0 +1,38 @@
+.chatTable {
+    margin-top: 2rem;
+    padding-inline: 1rem;
+    /* p-4 */
+    /* border-top: 1px solid #2d2d2d; */
+    /* border-t border-gray-800 */
+}
+
+.chatTable__container {
+    overflow-x: auto;
+    /* overflow-x-auto */
+}
+
+.chatTable__table {
+    width: 100%;
+    /* w-full */
+    border-collapse: collapse;
+}
+
+.chatTable__thead th {
+    padding: 1rem;
+    /* px-4 py-2 */
+    text-align: left;
+    border-bottom: 1px solid rgba(69, 66, 66, 0.3);
+    /* border-b border-gray-800 */
+}
+
+.chatTable__tbody td {
+    padding: 1rem;
+    /* px-4 py-2 */
+    border-bottom: 1px solid rgba(69, 66, 66, 0.3);
+    /* border-b border-gray-800 */
+}
+
+.chatTable__tbody tr:hover {
+    background-color: rgba(118, 118, 118, 0.2);
+    /* hover:bg-gray-900 */
+}

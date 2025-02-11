@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './styles/DocumentsListCard.module.css';
+import styles from '../styles/DocumentsListCard.module.css';
 import { FilePlus, FileText } from "lucide-react"
 
 interface DocumentsListCardProps {

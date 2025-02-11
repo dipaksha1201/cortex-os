@@ -1,0 +1,22 @@
+.userMessageContainer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.userMessage {
+    background-color: #f3f4f6;
+    border-radius: 30px;
+    padding: 1rem;
+    margin-block: 1.2rem;
+    color: #1f2937;
+}
+
+.cortexResponse {
+    color: #1f2937;
+    max-width: 60vw;
+    width: 60vw;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    font-weight: 570;
+}

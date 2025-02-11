@@ -1,10 +1,13 @@
-import type { Metadata } from 'next'
-import './globals.css'
+// layout.tsx
+import type { Metadata } from 'next';
+import './globals.css';
+import CortexInterface from '@/src/components/global/CortexInterface';
+import { ComponentProvider } from '@/src/components/global/ComponentContext';
 
 export const metadata: Metadata = {
-  title: 'v0 App',
+  title: 'Cortex',
   description: 'Created with v0',
-}
+};
 
 export default function RootLayout({
   children,
@@ -12,8 +15,12 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
-  )
+    <ComponentProvider>
+      <html lang="en">
+        <body>
+          <CortexInterface childWidget={<>{children}</>} />
+        </body>
+      </html>
+    </ComponentProvider>
+  );
 }

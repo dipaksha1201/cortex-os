@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { ChatItem } from "@/src/data/chatData"
-import styles from './styles/ChatList.module.css'
+import styles from '../styles/ChatList.module.css'
 
 interface ChatListProps {
   chatItems: ChatItem[]

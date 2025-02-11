@@ -1,37 +1,78 @@
-import { useEffect, useState } from "react"
-import { ChatItem } from "@/src/data/chatData"
-import { chatService } from "@/src/services/chatService"
-import { ProjectHeader } from "./ProjectHeader"
-import { NewChatInput } from "./NewChatInput"
-import { ProjectActions } from "./ProjectActions"
-import { ChatList } from "./ChatList"
-import { Navbar } from "./Navbar"
-import { Header } from "./Header"
-import styles from './styles/Navbar.module.css'
-import chatStyles from './styles/ChatInterface.module.css'
+import { useState, useEffect, ComponentType } from "react";
+import { ChatInput } from "./ChatInput";
+import ChatMessage from "./ChatMessage";
+import styles from "./styles/ChatInterface.module.css";
+import { sendChatMessage } from "../../services/chatService";
 
-export default function ChatInterface() {
-  const [chatItems, setChatItems] = useState<ChatItem[]>([])
-  const [isNavCollapsed, setIsNavCollapsed] = useState(false)
+interface Conversation {
+    _id: any;
+    messages: any[];
+}
 
-  useEffect(() => {
-    const fetchChats = async () => {
-      const items = await chatService.getChatItems()
-      setChatItems(items)
-    }
-    fetchChats()
-  }, [])
+interface ChatContentProps {
+    conversation?: Conversation;
+    shouldSendMessage?: boolean;
+    initialQuery?: string;
+}
 
-  return (
-    <>
-      <Navbar onToggle={setIsNavCollapsed} />
-      <Header isNavCollapsed={isNavCollapsed} />
-      <main className={`${styles.mainContent} ${isNavCollapsed ? styles.shifted : ''}`}> 
-        <ProjectHeader />
-        <NewChatInput />
-        <ProjectActions />
-        <ChatList chatItems={chatItems} />
-      </main>
-    </>
-  )
+const ChatContent: React.FC<ChatContentProps> = ({ conversation, shouldSendMessage = false, initialQuery = "" }) => {
+    const [messages, setMessages] = useState<any[]>([]);
+    const [conversatonId, setConversationId] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        const initialMessages = conversation?.messages ?? [];
+        const initialConversationId = conversation?._id ?? null;
+        setMessages(initialMessages);
+        setConversationId(initialConversationId);
+
+        // Optionally call handleSendMessage during initialization
+        if (shouldSendMessage && initialQuery) {
+            handleSendMessage(initialQuery);
+        }
+    }, [conversation, shouldSendMessage, initialQuery]);
+
+    const handleSendMessage = async (query: string) => {
+        const userMessage = {
+            content: query,
+            sender: 'user',
+        };
+
+        console.log("User message:", userMessage);
+
+        const userUpdatedMessages = [...messages, userMessage];
+        setMessages(userUpdatedMessages);
+        setIsLoading(true);
+
+        let updatedMessages: any;
+        (async () => {
+            try {
+                const result = await sendChatMessage(conversatonId, "dipak", query, [...messages, userMessage]);
+                updatedMessages = result.messages;
+                setConversationId(result.id);
+                setMessages(updatedMessages);
+            } finally {
+                setIsLoading(false);
+            }
+        })();
+    };
+
+    return (
+        <div className={styles.chatContainer}>
+            <div className={styles.messagesList}>
+                {messages.map((msg, index) => (
+                    <ChatMessage key={index} message={msg} sender={msg.sender} />
+                ))}
+                {isLoading && <div className={styles.loading}>Working...</div>}
+            </div>
+            <ChatInput onSendMessage={handleSendMessage} />
+        </div>
+    );
+};
+
+export default function ChatInterface(props: { conversation?: Conversation; shouldSendMessage?: boolean; initialQuery?: string }) {
+    const convo = props.conversation || { messages: [], _id: null };
+    return (
+        <ChatContent conversation={convo} shouldSendMessage={props.shouldSendMessage} initialQuery={props.initialQuery} />
+    );
 }

@@ -1,4 +1,4 @@
-import styles from "./styles/projectActions.module.css"
+import styles from "../styles/projectActions.module.css"
 import { useRef } from "react"
 import AddDocumentsCard from './AddDocumentsCard';
 import DocumentsListCard from './DocumentsListCard';
@@ -25,7 +25,7 @@ export function ProjectActions() {
       formData.append('file', file);
 
       for (let [key, value] of formData.entries()) {
-          console.log(key, value);
+        console.log(key, value);
       }
 
       try {

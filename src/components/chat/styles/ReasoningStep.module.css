@@ -1,0 +1,81 @@
+.reasoningStepContainer {
+    background: white;
+    border: 1px solid #D1D5DB;
+    /* Tailwind border-gray-300 */
+    border-radius: 15px;
+    /* Tailwind rounded-md */
+    padding: 0.8vw;
+    /* Tailwind p-4 */
+    width: 40vw;
+    /* max-width: 28rem; */
+    /* Tailwind max-w-md */
+    position: relative;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1vh;
+    /* Tailwind mb-4 */
+}
+
+.title {
+    font-weight: 600;
+    /* Tailwind font-semibold */
+    font-size: 1.25rem;
+    /* Tailwind text-xl */
+}
+
+.sourceCount {
+    font-size: 0.875rem;
+    /* Tailwind text-sm */
+    color: #6B7280;
+    /* Tailwind text-gray-500 */
+}
+
+/* Step container margins */
+.stepLarge {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin-bottom: 1vh;
+    gap: 1vh;
+    /* Tailwind mb-6 */
+}
+
+.checkIcon {
+    position: relative;
+    display: inline-block;
+    width: 0.7vw;
+    /* circle size */
+    height: 0.7vw;
+    /* circle size */
+    border-radius: 50%;
+    background-color: black;
+    margin-right: 0.7vw;
+    /* circle color */
+}
+
+/* Create the check mark using a pseudo-element */
+/* .checkIcon::after {
+    content: "";
+    position: absolute;
+    left: 0.35vw;
+    top: 0.3vw;
+    width: 0.15vw;
+    height: 0.6vw;
+    border-right: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    transform: rotate(45deg);
+} */
+
+/* Utility classes */
+.subqueryTitle {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-weight: 600;
+    opacity: 0.7;
+}
