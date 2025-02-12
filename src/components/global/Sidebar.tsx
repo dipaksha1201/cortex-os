@@ -1,67 +1,19 @@
 "use client"
 
 import {
-    ChevronRight,
     FileText,
-    Search,
 } from "lucide-react"
 import * as React from "react"
 import { useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import styles from "../styles/Sidebar.module.css"
 import { BiSidebar } from "react-icons/bi";
 import { useComponentContext } from '@/src/components/global/ComponentContext';
 import ChatInterface from "@/src/components/chat/ChatInterface";
 import ProjectInterface from "@/src/components/project/ProjectInterface";
-
-// Project navigation items
-// const projects = [
-//     {
-//         name: "Today",
-//         items: [
-//             { name: "First Screen Project Alpha", path: "/project-alpha" },
-//             { name: "Q324 Portfolio Review", path: "/portfolio-review" },
-//         ],
-//     },
-//     {
-//         name: "Yesterday",
-//         items: [
-//             { name: "Hannibal Revenue", path: "/hannibal" },
-//             { name: "Commercial Contracts", path: "/contracts" },
-//             { name: "Patent Prior Art", path: "/patents" },
-//             { name: "Deal Terms", path: "/deals" },
-//         ],
-//     },
-//     {
-//         name: "Projects",
-//         items: [
-//             {
-//                 name: "Project Alpha",
-//                 path: "/project-alpha",
-//                 items: [],
-//             },
-//             {
-//                 name: "Co",
-//                 path: "/co",
-//                 items: [],
-//             },
-//             {
-//                 name: "Acme Corp",
-//                 path: "/acme",
-//                 items: [
-//                     { name: "Acme Revenue", path: "/acme/revenue" },
-//                     { name: "Acme Investment Risks", path: "/acme/risks" },
-//                 ],
-//             },
-//             { name: "Nordic Telecoms", path: "/nordic" },
-//             { name: "Lease Agreements", path: "/leases" },
-//         ],
-//     },
-// ]
-
+import MemoryInterface from "../memory/MemoryInterface"
 
 export default function Sidebar({ onToggle, conversations }) {
     const [collapsed, setCollapsed] = useState(false)
@@ -84,12 +36,12 @@ export default function Sidebar({ onToggle, conversations }) {
                 alignItems: 'center',
                 backgroundColor: 'transparent',
             }}>
-                <div style={{ display: 'flex', flexDirection: 'row', alignItems: "center", gap: "0.2rem" }} onClick={() => handleComponentChange(<ProjectInterface />)}>
-                    <Avatar style={{ marginLeft: "1rem" }}>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: "center", gap: "0.2rem" }} >
+                    <Avatar style={{ marginLeft: "1rem" }} onClick={() => handleComponentChange(<ProjectInterface />)}>
                         <AvatarImage src="/product_img/CJ.png" style={{ filter: "brightness(0)", scale: 1.4 }} />
                         <AvatarFallback>CX</AvatarFallback>
                     </Avatar>
-                    <div style={{ marginRight: collapsed ? "2vw" : "4vw", height: "100%", fontSize: "1.5rem", fontWeight: "bold" }}>Cortex</div>
+                    <div style={{ marginRight: collapsed ? "2vw" : "4vw", height: "100%", fontSize: "1.5rem", fontWeight: "bold" }} onClick={() => handleComponentChange(<ProjectInterface />)}>Cortex</div>
                     <BiSidebar size={28} onClick={handleToggle} />
                 </div>
             </div>
@@ -100,27 +52,31 @@ export default function Sidebar({ onToggle, conversations }) {
                     <TopBar handleComponentChange={handleComponentChange} />
                     <ScrollArea className={styles.scrollArea}>
                         <div className={styles.sectionContainer}>
-                            <h3 className={styles.sectionHeader}>chats</h3>
-                            {Array.isArray(conversations) &&
-                                [...conversations]
-                                    .sort((a, b) => new Date(b.last_updated).getTime() - new Date(a.last_updated).getTime())
-                                    .map((section, index) => (
-                                        <div key={index}>
-                                            <div className={styles.sectionItems}>
-                                                <Button
-                                                    variant="ghost"
-                                                    className={styles.sectionItemButton}
-                                                    onClick={() => handleComponentChange(<ChatInterface conversation={section} />)}
-                                                >
-                                                    <FileText className={styles.fileIcon} />
-                                                    <div className={styles.sectionItemText}>
-                                                        {section.title != null ? section.title : section.messages[0].content}
-                                                    </div>
-                                                </Button>
+                            <h3 style={{ fontSize: '1.5rem', fontWeight: 'bolder', margin: "0.5rem", marginLeft: "0.7rem" }}>Chats</h3>
+                            <div style={{ overflowY: "auto", height: "75vh" }}>
+                                {Array.isArray(conversations) &&
+                                    [...conversations]
+                                        .sort((a, b) => new Date(b.last_updated).getTime() - new Date(a.last_updated).getTime())
+                                        .map((section, index) => (
+
+                                            <div key={index}>
+                                                <div className={styles.sectionItems}>
+                                                    <Button
+                                                        variant="ghost"
+                                                        className={styles.sectionItemButton}
+                                                        onClick={() => handleComponentChange(<ChatInterface conversation={section} />)}
+                                                    >
+                                                        <FileText className={styles.fileIcon} />
+                                                        <div className={styles.sectionItemText}>
+                                                            {section.title != null ? section.title : section.messages[0].content}
+                                                        </div>
+                                                    </Button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))
-                            }
+
+                                        ))
+                                }
+                            </div>
                         </div>
                     </ScrollArea>
                 </div>
@@ -136,49 +92,70 @@ interface TopBarProps {
 
 const TopBar: React.FC<TopBarProps> = ({ handleComponentChange }) => {
     return (
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', justifyContent: 'center', backgroundColor: 'transparent', padding: '0.7rem' }}>
-            <button
-                style={{
-                    backgroundColor: 'white',
-                    width: '14rem',
-                    color: 'black',
-                    border: '1px solid black',
-                    borderRadius: '4px',
-                    padding: '0.3rem 0.7rem',
-                    cursor: 'pointer'
-                }}
-                onClick={() => handleComponentChange(<ChatInterface />)}
-            >
-                + New Chat
-            </button>
-            <button
-                style={{
-                    backgroundColor: 'white',
-                    border: '1px solid black',
-                    borderRadius: '4px',
-                    padding: '0.4rem 0.7rem',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center'
-                }}
-            >
-                <svg
-                    height="16"
-                    width="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="black"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+
+        <>
+            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', justifyContent: 'center', backgroundColor: 'transparent', padding: '0.7rem' }}>
+                <button
+                    style={{
+                        backgroundColor: 'white',
+                        width: '14rem',
+                        color: 'black',
+                        border: '1.5px solid black',
+                        borderRadius: '8px',
+                        fontWeight: 'bold',
+                        padding: '0.3rem 0.7rem',
+                        cursor: 'pointer'
+                    }}
+                    onClick={() => handleComponentChange(<MemoryInterface />)}
                 >
-                    {/* Folder icon path */}
-                    <path d="M4 4h5l2 2h9a2 2 0 0 1 2 2v9c0 1.1-.9 2-2 2H4a2 2 0 0 1-2-2V6c0-1.1.9-2 2-2z" />
-                    {/* Plus sign path */}
-                    <line x1="12" y1="9" x2="12" y2="15" />
-                    <line x1="9" y1="12" x2="15" y2="12" />
-                </svg>
-            </button>
-        </div>
+                    Memory Library
+                </button>
+            </div>
+            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', justifyContent: 'center', backgroundColor: 'transparent', padding: '0.7rem' }}>
+                <button
+                    style={{
+                        backgroundColor: 'white',
+                        width: '14rem',
+                        color: 'black',
+                        border: '1.5px solid black',
+                        borderRadius: '8px',
+                        padding: '0.3rem 0.7rem',
+                        cursor: 'pointer',
+                        fontWeight: 'bold'
+                    }}
+                    onClick={() => handleComponentChange(<ChatInterface />)}
+                >
+                    + New Chat
+                </button>
+                <button
+                    style={{
+                        backgroundColor: 'white',
+                        border: '1.5px solid black',
+                        borderRadius: '8px',
+                        padding: '0.4rem 0.7rem',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center'
+                    }}
+                >
+                    <svg
+                        height="16"
+                        width="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="black"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                    >
+                        {/* Folder icon path */}
+                        <path d="M4 4h5l2 2h9a2 2 0 0 1 2 2v9c0 1.1-.9 2-2 2H4a2 2 0 0 1-2-2V6c0-1.1.9-2 2-2z" />
+                        {/* Plus sign path */}
+                        <line x1="12" y1="9" x2="12" y2="15" />
+                        <line x1="9" y1="12" x2="15" y2="12" />
+                    </svg>
+                </button>
+            </div>
+        </>
     );
 };

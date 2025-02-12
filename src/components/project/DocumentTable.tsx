@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "../styles/DocumentTable.module.css";
 import AddDocumentsCard from './AddDocumentsCard';
-import { sendFilePostRequest } from '../../services/projectService'; // added import
+import { sendFilePostRequest } from '../../services/projectService';
 
 interface Document {
     id: string;
@@ -19,9 +19,8 @@ interface DocumentTableProps {
 
 export function DocumentTable({ documents }: DocumentTableProps) {
 
-    const [loading, setLoading] = useState(false); // new state
+    const [loading, setLoading] = useState(false);
 
-    // New function to handle file selection and upload
     const handleAddDocumentClick = () => {
         const input = document.createElement('input');
         input.type = 'file';
@@ -30,14 +29,13 @@ export function DocumentTable({ documents }: DocumentTableProps) {
             const target = event.target as HTMLInputElement;
             if (target.files && target.files[0]) {
                 const file = target.files[0];
-                setLoading(true); // set loading state
+                setLoading(true);
                 try {
-                    // Replace 'exampleUser' with the real user name as needed.
                     await sendFilePostRequest('dipak', file);
                 } catch (error) {
                     console.error('File upload failed:', error);
                 } finally {
-                    setLoading(false); // reset loading state
+                    setLoading(false);
                 }
             }
         };
@@ -45,7 +43,7 @@ export function DocumentTable({ documents }: DocumentTableProps) {
     };
 
     const columns = [
-        { key: 'num', title: '#', dataIndex: '' }, // new: numbering column
+        { key: 'num', title: '#', dataIndex: '' },
         { key: 'name', title: 'Name', dataIndex: 'name' },
         { key: 'type', title: 'Type', dataIndex: 'type' },
         { key: 'summary', title: 'Summary', dataIndex: 'summary' },
@@ -56,7 +54,7 @@ export function DocumentTable({ documents }: DocumentTableProps) {
         <div className={styles.chatTable}>
             <div className={styles.documentTableHeader}>
                 {loading ? (
-                    <div>Uploading...</div> // show loading indicator during API call
+                    <div>Uploading...</div>
                 ) : (
                     <AddDocumentsCard onClick={handleAddDocumentClick} />
                 )}

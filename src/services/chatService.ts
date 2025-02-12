@@ -29,7 +29,7 @@ export const sendChatMessage = async (
     conversationId = cortexResponse.conversation_id;
     console.log("Cortex response:", cortexResponse);
     // Append the API response message
-    currentMessages.push(cortexResponse.response.message);
+    currentMessages.push(cortexResponse.response);
   } catch (error) {
     const errorMessage = {
       message: error.message.toString(),

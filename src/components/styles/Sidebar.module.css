@@ -25,10 +25,12 @@
 }
 
 .sectionItemText {
-    display: block;
-    width: 10rem;
-    /* Set a fixed width or appropriate percentage */
+    display: flex;
+    width: 11rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    align-items: flex-start;
+    min-width: 0;
+    flex-shrink: 1;
 }

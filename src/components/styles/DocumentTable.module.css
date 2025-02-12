@@ -52,9 +52,9 @@
     border: 1px solid rgba(69, 66, 66, 0.3);
 }
 
-.chatTable__tbody tr:hover {
-    background-color: rgba(118, 118, 118, 0.2);
-    /* hover:bg-gray-900 */
+/* Add a fixed height to each row in the document table */
+.chatTable__tbody tr {
+    height: 10vh !important;
 }
 
 /* new: styling for header above table */
@@ -79,6 +79,11 @@
     transition: background-color 0.2s;
 }
 
-.addDocumentButton:hover {
-    background-color: rgba(69, 66, 66, 0.1);
+.td {
+    height: 10vh;
+}
+
+.chatTable__tbody__cell:hover {
+    background-color: rgba(118, 118, 118, 0.2);
+    /* hover:bg-gray-900 */
 }
