@@ -14,9 +14,10 @@ interface Document {
 
 interface DocumentTableProps {
     documents: Document[];
+    onUploadSuccess?: () => void;
 }
 
-export function DocumentTable({ documents }: DocumentTableProps) {
+export function DocumentTable({ documents, onUploadSuccess }: DocumentTableProps) {
     const [loading, setLoading] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [selectedSummary, setSelectedSummary] = useState<string | null>(null);
@@ -44,7 +45,10 @@ export function DocumentTable({ documents }: DocumentTableProps) {
                 const file = target.files[0];
                 setLoading(true);
                 try {
-                    await sendFilePostRequest('dipak', file);
+                    const response = await sendFilePostRequest('dipak', file);
+                    if (response.status === 200) {
+                        onUploadSuccess?.();
+                    }
                 } catch (error) {
                     console.error('File upload failed:', error);
                 } finally {

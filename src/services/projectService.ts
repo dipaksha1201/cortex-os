@@ -1,5 +1,5 @@
 export async function sendDocumentsGetRequest(user_id: string): Promise<any> {
-    const url = new URL('http://localhost:8000/api/documents/all');
+    const url = new URL('http://localhost:8000/doc/documents/all');
     url.searchParams.append('user_id', user_id);
     try {
         const response = await fetch(url.toString(), {
@@ -20,7 +20,7 @@ export async function sendDocumentsGetRequest(user_id: string): Promise<any> {
 
 export async function sendFilePostRequest(user_name: string, file: File): Promise<any> {
     // Create URL with query parameter 'user_name'
-    const url = new URL('http://localhost:8000/api/index');
+    const url = new URL('http://localhost:8000/doc/index');
     url.searchParams.append('user_name', user_name);
 
     // Create FormData and append the file

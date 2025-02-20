@@ -17,20 +17,61 @@
     background-color: transparent;
 }
 
+.sectionContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
 .sectionItems {
     display: flex;
     flex-direction: row;
     text-overflow: ellipsis;
-    gap: 0.5rem;
+    position: relative;
+    padding: 0;
+    width: 100%;
+    margin: 0;
+}
+
+.sectionItems:hover .deleteButton {
+    opacity: 1;
+}
+
+.sectionItemButton {
+    width: 100%;
+    text-align: left;
+    padding: 0.15rem 2.5rem 0.15rem 0.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    min-height: 2rem;
 }
 
 .sectionItemText {
     display: flex;
-    width: 11rem;
+    width: 12rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     align-items: flex-start;
     min-width: 0;
     flex-shrink: 1;
+}
+
+.fileIcon {
+    margin-left: 0;
+    width: 1rem;
+    height: 1rem;
+}
+
+.deleteButton {
+    opacity: 0;
+    transition: all 0.2s ease;
+    padding: 0.1rem;
+}
+
+.deleteButton:hover {
+    color: #ef4444;
+    background-color: rgba(239, 68, 68, 0.1);
+    border-radius: 4px;
 }

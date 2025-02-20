@@ -2,6 +2,7 @@
 
 import {
     FileText,
+    Trash2
 } from "lucide-react"
 import * as React from "react"
 import { useState } from 'react'
@@ -14,8 +15,21 @@ import { useComponentContext } from '@/src/components/global/ComponentContext';
 import ChatInterface from "@/src/components/chat/ChatInterface";
 import ProjectInterface from "@/src/components/project/ProjectInterface";
 import MemoryInterface from "../memory/MemoryInterface"
+import { deleteConversation } from "@/src/services/chatService"
 
-export default function Sidebar({ onToggle, conversations }) {
+interface Conversation {
+    _id: string;
+    title: string | null;
+    messages: any[];
+    last_updated: string;
+}
+
+interface SidebarProps {
+    onToggle: (collapsed: boolean) => void;
+    conversations: Conversation[];
+}
+
+export default function Sidebar({ onToggle, conversations }: SidebarProps) {
     const [collapsed, setCollapsed] = useState(false)
     const { setCurrentComponent } = useComponentContext();
 
@@ -28,6 +42,17 @@ export default function Sidebar({ onToggle, conversations }) {
     const handleComponentChange = (component: React.ReactNode) => {
         setCurrentComponent(component);
     }
+
+    const handleDelete = async (e: React.MouseEvent, conversationId: string) => {
+        e.stopPropagation();
+        console.log("Deleting conversation:", conversationId);
+        try {
+            await deleteConversation(conversationId);
+            handleComponentChange(<ChatInterface />);
+        } catch (error) {
+            console.error("Error deleting conversation:", error);
+        }
+    };
 
     return (
         <nav className={`${styles.navbar} ${collapsed ? styles.collapsed : ''}`}>
@@ -52,13 +77,16 @@ export default function Sidebar({ onToggle, conversations }) {
                     <TopBar handleComponentChange={handleComponentChange} />
                     <ScrollArea className={styles.scrollArea}>
                         <div className={styles.sectionContainer}>
-                            <h3 style={{ fontSize: '1.5rem', fontWeight: 'bolder', margin: "0.5rem", marginLeft: "0.7rem" }}>Chats</h3>
+                            <h3 style={{
+                                fontSize: '1.5rem',
+                                fontWeight: 'bolder',
+                                margin: "0.5rem 0 0.5rem 0.2rem"
+                            }}>Chats</h3>
                             <div style={{ overflowY: "auto", height: "75vh" }}>
                                 {Array.isArray(conversations) &&
                                     [...conversations]
                                         .sort((a, b) => new Date(b.last_updated).getTime() - new Date(a.last_updated).getTime())
                                         .map((section, index) => (
-
                                             <div key={index}>
                                                 <div className={styles.sectionItems}>
                                                     <Button
@@ -70,10 +98,16 @@ export default function Sidebar({ onToggle, conversations }) {
                                                         <div className={styles.sectionItemText}>
                                                             {section.title != null ? section.title : section.messages[0].content}
                                                         </div>
+                                                        <Button
+                                                            variant="ghost"
+                                                            className={styles.deleteButton}
+                                                            onClick={(e) => handleDelete(e, section._id)}
+                                                        >
+                                                            <Trash2 className="h-4 w-4" />
+                                                        </Button>
                                                     </Button>
                                                 </div>
                                             </div>
-
                                         ))
                                 }
                             </div>

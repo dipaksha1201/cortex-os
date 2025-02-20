@@ -50,3 +50,11 @@ export const getChatHistory = async (userName: string) => {
   });
   return response.json();
 }
+
+export const deleteConversation = async (conversationId: string) => {
+  const response = await fetch(`http://localhost:8000/chat/conversation/${conversationId}`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' }
+  });
+  return response.json();
+}
