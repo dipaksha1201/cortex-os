@@ -2,7 +2,7 @@ import { useState, useEffect, ComponentType } from "react";
 import { ChatInput } from "./ChatInput";
 import ChatMessage from "./ChatMessage";
 import styles from "./styles/ChatInterface.module.css";
-import { sendChatMessage } from "../../services/chatService";
+import { streamChatMessage } from "../../services/chatService";
 
 interface Conversation {
     _id: any;
@@ -47,10 +47,17 @@ const ChatContent: React.FC<ChatContentProps> = ({ conversation, shouldSendMessa
         let updatedMessages: any;
         (async () => {
             try {
-                const result = await sendChatMessage(conversatonId, "dipak", query, [...messages, userMessage]);
-                updatedMessages = result.messages;
-                setConversationId(result.id);
-                setMessages(updatedMessages);
+                const result = await streamChatMessage(conversatonId, "dipak", query, {
+                    onStream: (data) => {
+                        console.log("Stream data:", data);
+                    },
+                    onFinished: () => {
+                        console.log("Stream finished");
+                    },
+                    onError: (error) => {
+                        console.error("Stream error:", error);
+                    }
+                });
             } finally {
                 setIsLoading(false);
             }

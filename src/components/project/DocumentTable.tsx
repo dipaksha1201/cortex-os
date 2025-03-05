@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { MaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
 import AddDocumentsCard from './AddDocumentsCard';
-import { sendFilePostRequest } from '../../services/projectService';
+import { sendFileStreamingRequest } from '../../services/projectService';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface Document {
@@ -21,6 +21,9 @@ export function DocumentTable({ documents, onUploadSuccess }: DocumentTableProps
     const [loading, setLoading] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [selectedSummary, setSelectedSummary] = useState<string | null>(null);
+    const [uploadStatus, setUploadStatus] = useState<string | null>(null);
+    const [uploadMessage, setUploadMessage] = useState<string | null>(null);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     useEffect(() => {
         const handleEsc = (event: KeyboardEvent) => {
@@ -44,15 +47,45 @@ export function DocumentTable({ documents, onUploadSuccess }: DocumentTableProps
             if (target.files && target.files[0]) {
                 const file = target.files[0];
                 setLoading(true);
+                setUploadStatus('Starting');
+                setUploadMessage('Preparing to upload file...');
+                setErrorMessage(null);
                 try {
-                    const response = await sendFilePostRequest('dipak', file);
-                    if (response.status === 200) {
-                        onUploadSuccess?.();
-                    }
+                    await sendFileStreamingRequest('dipak', file, (data) => {
+                        if (data.status) {
+                            setUploadStatus(data.status);
+                        }
+
+                        if (data.message) {
+                            setUploadMessage(data.message);
+                        }
+
+                        if (data.error) {
+                            setErrorMessage(data.error);
+                            setUploadStatus('Error');
+                        }
+
+                        if (data.status === 'completed') {
+                            onUploadSuccess?.();
+                        }
+                    });
                 } catch (error) {
                     console.error('File upload failed:', error);
+                    setErrorMessage(error instanceof Error ? error.message : 'An unknown error occurred');
+                    setUploadStatus('Error');
                 } finally {
-                    setLoading(false);
+                    if (errorMessage) {
+                        setTimeout(() => {
+                            setLoading(false);
+                            setUploadStatus(null);
+                            setUploadMessage(null);
+                            setErrorMessage(null);
+                        }, 5000);
+                    } else {
+                        setLoading(false);
+                        setUploadStatus(null);
+                        setUploadMessage(null);
+                    }
                 }
             }
         };
@@ -166,7 +199,49 @@ export function DocumentTable({ documents, onUploadSuccess }: DocumentTableProps
         <div style={{ padding: '20px' }}>
             <div style={{ marginBottom: '20px' }}>
                 {loading ? (
-                    <div>Uploading...</div>
+                    <div style={{
+                        padding: '20px',
+                        textAlign: 'center',
+                        border: '1px solid rgba(0, 0, 0, 0.1)',
+                        borderRadius: '8px',
+                        background: errorMessage ? '#fff8f8' : '#f9f9f9',
+                        borderColor: errorMessage ? '#ffdddd' : 'rgba(0, 0, 0, 0.1)'
+                    }}>
+                        {uploadStatus && (
+                            <div style={{
+                                marginBottom: '10px',
+                                fontSize: '18px',
+                                fontWeight: 'bold',
+                                color: errorMessage ? '#d32f2f' : 'inherit'
+                            }}>
+                                {uploadStatus}
+                            </div>
+                        )}
+                        {uploadMessage && (
+                            <div style={{
+                                fontSize: '16px',
+                                fontWeight: 'bold',
+                                color: errorMessage ? '#d32f2f' : '#4a4a4a',
+                                padding: '10px',
+                                animation: errorMessage ? 'none' : 'pulse 1.5s infinite'
+                            }}>
+                                {uploadMessage}
+                            </div>
+                        )}
+                        {errorMessage && (
+                            <div style={{
+                                fontSize: '14px',
+                                color: '#d32f2f',
+                                padding: '10px',
+                                marginTop: '10px',
+                                background: '#ffeeee',
+                                borderRadius: '4px',
+                                border: '1px solid #ffcccc'
+                            }}>
+                                {errorMessage}
+                            </div>
+                        )}
+                    </div>
                 ) : (
                     <AddDocumentsCard onClick={handleAddDocumentClick} />
                 )}

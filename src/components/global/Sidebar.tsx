@@ -16,7 +16,7 @@ import ChatInterface from "@/src/components/chat/ChatInterface";
 import ProjectInterface from "@/src/components/project/ProjectInterface";
 import MemoryInterface from "../memory/MemoryInterface"
 import { deleteConversation } from "@/src/services/chatService"
-
+import StreamingChatInterface from "../chat/StreamingChatInterface";
 interface Conversation {
     _id: string;
     title: string | null;
@@ -27,9 +27,10 @@ interface Conversation {
 interface SidebarProps {
     onToggle: (collapsed: boolean) => void;
     conversations: Conversation[];
+    onDeleteConversation: (conversationId: string) => Promise<void>;
 }
 
-export default function Sidebar({ onToggle, conversations }: SidebarProps) {
+export default function Sidebar({ onToggle, conversations, onDeleteConversation }: SidebarProps) {
     const [collapsed, setCollapsed] = useState(false)
     const { setCurrentComponent } = useComponentContext();
 
@@ -47,7 +48,7 @@ export default function Sidebar({ onToggle, conversations }: SidebarProps) {
         e.stopPropagation();
         console.log("Deleting conversation:", conversationId);
         try {
-            await deleteConversation(conversationId);
+            await onDeleteConversation(conversationId);
             handleComponentChange(<ChatInterface />);
         } catch (error) {
             console.error("Error deleting conversation:", error);
@@ -92,7 +93,7 @@ export default function Sidebar({ onToggle, conversations }: SidebarProps) {
                                                     <Button
                                                         variant="ghost"
                                                         className={styles.sectionItemButton}
-                                                        onClick={() => handleComponentChange(<ChatInterface conversation={section} />)}
+                                                        onClick={() => handleComponentChange(<StreamingChatInterface conversation={section} />)}
                                                     >
                                                         <FileText className={styles.fileIcon} />
                                                         <div className={styles.sectionItemText}>
@@ -140,9 +141,9 @@ const TopBar: React.FC<TopBarProps> = ({ handleComponentChange }) => {
                         padding: '0.3rem 0.7rem',
                         cursor: 'pointer'
                     }}
-                    onClick={() => handleComponentChange(<MemoryInterface />)}
+                    onClick={() => handleComponentChange(<ProjectInterface />)}
                 >
-                    Memory Library
+                    Workspace
                 </button>
             </div>
             <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', justifyContent: 'center', backgroundColor: 'transparent', padding: '0.7rem' }}>
@@ -157,7 +158,7 @@ const TopBar: React.FC<TopBarProps> = ({ handleComponentChange }) => {
                         cursor: 'pointer',
                         fontWeight: 'bold'
                     }}
-                    onClick={() => handleComponentChange(<ChatInterface />)}
+                    onClick={() => handleComponentChange(<StreamingChatInterface />)}
                 >
                     + New Chat
                 </button>

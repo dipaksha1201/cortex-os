@@ -2,12 +2,6 @@ import React, { useState } from 'react';
 import style from "./styles/ReasoningStep.module.css";
 import ReactMarkdown from 'react-markdown';
 
-interface ReasoningMessageProps {
-    query: string;
-    properties: string;
-    context: string;
-}
-
 function breakProperties(properties: string): string[] {
     return properties
         .split(',')
@@ -53,19 +47,35 @@ const Context: React.FC<ContextProps> = ({ text }) => {
     );
 };
 
-const ToggleStep: React.FC<ReasoningMessageProps> = ({ query, properties, context }) => {
-    const [isOpen, setIsOpen] = useState(false);
+function cleanText(text: string): string {
+    // Remove starting asterisks and spaces
+    text = text.replace(/^\s*\*\s*/gm, '');
+    // Normalize line breaks
+    text = text.replace(/(\r\n|\r|\n)+/g, '\n').trim();
+    console.log(text);
+    return text;
+}
+
+export interface ReasoningMessageProps {
+    subquery: string;
+    response: string;
+    shouldShow: boolean;
+}
+
+
+const ToggleStep: React.FC<ReasoningMessageProps> = ({ subquery, response, shouldShow }) => {
+    const [isOpen, setIsOpen] = useState(shouldShow);
 
     return (
         <div className={style.stepLarge}>
             <div className={style.subqueryTitle} onClick={() => setIsOpen(!isOpen)}>
                 <div className={style.checkIcon}></div>
-                <div>{query}</div>
+                <div>{subquery}</div>
             </div>
             {isOpen && (
                 <>
-                    <PropertyList items={breakProperties(properties)} />
-                    <Context text={context} />
+                    {/* <PropertyList items={breakProperties(properties)} /> */}
+                    <Context text={cleanText(response)} />
                 </>
             )}
         </div>
@@ -73,7 +83,7 @@ const ToggleStep: React.FC<ReasoningMessageProps> = ({ query, properties, contex
 };
 
 interface ReasoningStepListProps {
-    messages: ReasoningMessageProps[];
+    messages: any;
 }
 
 const ReasoningStep: React.FC<ReasoningStepListProps> = ({ messages }) => {
@@ -86,7 +96,7 @@ const ReasoningStep: React.FC<ReasoningStepListProps> = ({ messages }) => {
             </div>
 
             {messages.map((msg, index) => (
-                <ToggleStep key={index} {...msg} />
+                <ToggleStep key={index} {...msg} shouldShow={index === messages.length - 1} />
             ))}
         </div>
     );

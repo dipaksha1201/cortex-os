@@ -2,33 +2,162 @@
 
 .chatContainer {
     display: flex;
-    height: 92vh;
-    width: 90vw;
     flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px;
+    height: 100%;
+    width: 100%;
 }
 
-.messagesList {
-    width: 80vw;
-    margin: 0 auto;
-    padding: 1rem;
-    margin-bottom: 1.5rem;
+.messagesContainer {
+    flex: 1;
     overflow-y: auto;
-    max-height: 100vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow: auto;
     scrollbar-width: none;
-    /* For Firefox */
     -ms-overflow-style: none;
-    /* For Internet Explorer and Edge */
 }
 
-.messagesList::-webkit-scrollbar {
+.messagesContainer::-webkit-scrollbar {
     display: none;
-    /* For Chrome, Safari, and Opera */
 }
 
+.inputContainer {
+    display: flex;
+    padding: 16px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
 
 .chatInput {
-    margin-top: 16px;
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    font-size: 16px;
+    outline: none;
+}
+
+.chatInput:focus {
+    border-color: #4a4a4a;
+}
+
+.chatInput:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
+
+.sendButton {
+    margin-left: 8px;
+    padding: 0 20px;
+    background-color: #4a4a4a;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.sendButton:hover:not(:disabled) {
+    background-color: #333;
+}
+
+.sendButton:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+
+/* Streaming indicator styles */
+.streamingIndicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px;
+    margin: 8px 0;
+}
+
+.streamingDot {
+    width: 8px;
+    height: 8px;
+    background-color: #4a4a4a;
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+}
+
+.streamingDot:nth-child(2) {
+    animation-delay: 0.3s;
+}
+
+.streamingDot:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+
+    100% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+}
+
+/* Connection status styles */
+.connectionStatus {
+    padding: 8px 16px;
+    display: flex;
+    justify-content: flex-end;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.statusConnected,
+.statusConnecting,
+.statusDisconnected,
+.statusError {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.statusConnected {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.statusConnecting {
+    background-color: #fff3cd;
+    color: #856404;
+    animation: pulse 1.5s infinite;
+}
+
+.statusDisconnected {
+    background-color: #f8f9fa;
+    color: #6c757d;
+}
+
+.statusError {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Error banner */
+.errorBanner {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 12px 16px;
+    margin: 0 16px 16px;
+    border-radius: 4px;
+    border-left: 4px solid #721c24;
+    font-size: 14px;
 }

@@ -1,6 +1,4 @@
 import React from 'react';
-import { Card } from '@/components/ui/card';
-import styles from '../styles/AddDocumentsCard.module.css';
 import { FilePlus } from 'lucide-react';
 
 interface AddDocumentsCardProps {
@@ -9,14 +7,26 @@ interface AddDocumentsCardProps {
 
 const AddDocumentsCard: React.FC<AddDocumentsCardProps> = ({ onClick }) => {
   return (
-    <Card className={styles.actionCard} onClick={onClick} role="button" tabIndex={0}>
-      <div className={styles.actionInfo}>
-        <h2 className={styles.actionTitle}>Add Documents</h2>
-      </div>
-      <div className={styles.iconWrapper}>
-        <FilePlus className={styles.refreshIcon} />
-      </div>
-    </Card>
+    <button
+      onClick={onClick}
+      style={{
+        marginBottom: '10px',
+        padding: '8px 16px',
+        background: '#4a4a4a',
+        color: 'white',
+        border: 'none',
+        borderRadius: '4px',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        fontSize: '14px',
+        fontWeight: 'bold'
+      }}
+    >
+      <FilePlus size={18} />
+      Add Documents
+    </button>
   );
 };
 

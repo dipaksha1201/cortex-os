@@ -1,5 +1,7 @@
+import { API_CONFIG_CORTEX_SERVICE } from '../config'
+
 export async function sendMemoriesGetRequest(user_id: string): Promise<any> {
-    const url = new URL('http://localhost:8000/api/memories/all');
+    const url = new URL(`${API_CONFIG_CORTEX_SERVICE.BASE_URL}/get/memories/all`);
     url.searchParams.append('user_id', user_id);
     try {
         const response = await fetch(url.toString(), {

@@ -1,7 +1,7 @@
 "use client"
 
-import ChatInterface from "@/src/components/chat/ChatInterface"
+import StreamingChatInterface from "@/src/components/chat/StreamingChatInterface"
 
 export default function ChatPage() {
-    return <ChatInterface />
+    return <StreamingChatInterface />
 }
