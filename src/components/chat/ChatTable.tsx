@@ -41,16 +41,20 @@ export function ChatTable(jsondata: any) {
                             ))}
                         </tr>
                     </thead>
-                    <tbody className={styles.chatTable__tbody}>
-                        {data.map((row, rowIdx) => (
-                            <tr key={rowIdx}>
-                                {columns.map((col) => (
-                                    <td key={col.key}>{row[col.dataIndex]}</td>
-                                ))}
-                            </tr>
-                        ))}
-                    </tbody>
                 </table>
+                <div className={styles.chatTable__bodyContainer}>
+                    <table className={styles.chatTable__table}>
+                        <tbody className={styles.chatTable__tbody}>
+                            {data.map((row, rowIdx) => (
+                                <tr key={rowIdx}>
+                                    {columns.map((col) => (
+                                        <td key={col.key}>{row[col.dataIndex]}</td>
+                                    ))}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );

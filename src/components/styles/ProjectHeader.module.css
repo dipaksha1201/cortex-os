@@ -3,6 +3,7 @@
   align-items: center;
   justify-content: left;
   gap: 1rem;
+  padding: 20px;
   margin-bottom: 1.5rem;
   width: 60vw;
 }

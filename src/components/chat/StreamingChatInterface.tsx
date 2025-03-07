@@ -2,6 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { streamChatMessage, ChatWebSocketService } from '../../services/chatService';
 import ChatMessage from './ChatMessage';
 import styles from './styles/ChatInterface.module.css';
+import dotenv from 'dotenv';
+import ChatInput from './ChatInput';
+
+// Load environment variables from .env file
+dotenv.config();
+console.log('API_BASE_URL_DOC_SERVICE:', process.env.API_BASE_URL_DOC_SERVICE);
 
 interface Conversation {
     _id: any;
@@ -59,6 +65,7 @@ const StreamingChatInterface: React.FC<StreamingChatInterfaceProps> = ({
     useEffect(() => {
         const initialMessages = conversation?.messages ?? [];
         const initialConversationId = conversation?._id ?? null;
+        console.log('API_BASE_URL_DOC_SERVICE:', process.env.API_BASE_URL_DOC_SERVICE);
         setMessages(initialMessages);
         setConversationId(initialConversationId);
 
@@ -109,6 +116,13 @@ const StreamingChatInterface: React.FC<StreamingChatInterfaceProps> = ({
                             reasoning[reasoning.length - 1].response = data.content || '';
                             updated[tempResponseIndex].reasoning = reasoning;
                         }
+                    }
+                    else if (data.type === 'response-streaming') {
+                        reasoning[reasoning.length - 1].response = reasoning[reasoning.length - 1].response + data.content || '';
+                        updated[tempResponseIndex].reasoning = reasoning;
+                    }
+                    else if (data.type === 'final-answer-streaming') {
+                        updated[tempResponseIndex].content += data.content || '';
                     }
                     else if (data.type === 'complete') {
                         updated[tempResponseIndex].content = data.content || '';
@@ -287,24 +301,12 @@ const StreamingChatInterface: React.FC<StreamingChatInterfaceProps> = ({
                 </div>
             )}
 
-            <div className={styles.inputContainer}>
-                <input
-                    type="text"
-                    value={inputValue}
-                    onChange={handleInputChange}
-                    onKeyDown={handleKeyDown}
-                    placeholder="Ask a question..."
-                    disabled={isStreaming}
-                    className={styles.chatInput}
-                />
-                <button
-                    onClick={() => handleSendMessage(inputValue)}
-                    disabled={isStreaming || !inputValue.trim()}
-                    className={styles.sendButton}
-                >
-                    Send
-                </button>
-            </div>
+            <ChatInput
+                inputValue={inputValue}
+                onInputChange={handleInputChange}
+                onSendMessage={() => handleSendMessage(inputValue)}
+                isStreaming={isStreaming}
+            />
         </div>
     );
 };

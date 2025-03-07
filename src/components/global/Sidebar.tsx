@@ -12,10 +12,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import styles from "../styles/Sidebar.module.css"
 import { BiSidebar } from "react-icons/bi";
 import { useComponentContext } from '@/src/components/global/ComponentContext';
-import ChatInterface from "@/src/components/chat/ChatInterface";
 import ProjectInterface from "@/src/components/project/ProjectInterface";
-import MemoryInterface from "../memory/MemoryInterface"
-import { deleteConversation } from "@/src/services/chatService"
 import StreamingChatInterface from "../chat/StreamingChatInterface";
 interface Conversation {
     _id: string;
@@ -49,7 +46,7 @@ export default function Sidebar({ onToggle, conversations, onDeleteConversation 
         console.log("Deleting conversation:", conversationId);
         try {
             await onDeleteConversation(conversationId);
-            handleComponentChange(<ChatInterface />);
+            handleComponentChange(<StreamingChatInterface />);
         } catch (error) {
             console.error("Error deleting conversation:", error);
         }

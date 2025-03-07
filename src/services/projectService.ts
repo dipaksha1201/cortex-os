@@ -20,6 +20,26 @@ export async function sendDocumentsGetRequest(user_id: string): Promise<any> {
     }
 }
 
+export async function sendDocumentDeleteRequest(user_id: string, document_id: string): Promise<any> {
+    const url = new URL(`${API_CONFIG_DOC_SERVICE.BASE_URL}/document/${document_id}`);
+    url.searchParams.append('user_id', user_id);
+    try {
+        const response = await fetch(url.toString(), {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error in DELETE request:', error);
+        throw error;
+    }
+}
+
 export async function sendFilePostRequest(user_name: string, file: File): Promise<any> {
     // Create URL with query parameter 'user_name'
     const url = new URL(`${API_CONFIG_DOC_SERVICE.BASE_URL}/index`);

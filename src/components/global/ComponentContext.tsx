@@ -1,8 +1,7 @@
 "use client"
 
 import { createContext, useContext, useState, ReactNode } from 'react';
-import ChatInterface from '../chat/ChatInterface';
-
+import StreamingChatInterface from '../chat/StreamingChatInterface';
 interface ComponentContextProps {
     currentComponent: ReactNode;
     setCurrentComponent: (component: ReactNode) => void;
@@ -11,7 +10,7 @@ interface ComponentContextProps {
 const ComponentContext = createContext<ComponentContextProps | undefined>(undefined);
 
 export const ComponentProvider = ({ children }: { children: ReactNode }) => {
-    const [currentComponent, setCurrentComponent] = useState<ReactNode>(<ChatInterface />);
+    const [currentComponent, setCurrentComponent] = useState<ReactNode>(<StreamingChatInterface />);
 
     return (
         <ComponentContext.Provider value={{ currentComponent, setCurrentComponent }}>

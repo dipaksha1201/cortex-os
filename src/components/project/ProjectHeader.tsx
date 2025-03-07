@@ -7,7 +7,7 @@ export function ProjectHeader() {
       <div className={styles.iconContainer}>
         <FileText className={styles.icon} />
       </div>
-      <h1 className={styles.title}>Cortex</h1>
+      <h1 className={styles.title}>Dipak's Workspace</h1>
     </header>
   )
 }

@@ -1,8 +1,10 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { MaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
 import AddDocumentsCard from './AddDocumentsCard';
-import { sendFileStreamingRequest } from '../../services/projectService';
+import { sendFileStreamingRequest, sendDocumentDeleteRequest } from '../../services/projectService';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface Document {
     id: string;
@@ -52,6 +54,7 @@ export function DocumentTable({ documents, onUploadSuccess }: DocumentTableProps
                 setErrorMessage(null);
                 try {
                     await sendFileStreamingRequest('dipak', file, (data) => {
+                        console.log("Data:", data);
                         if (data.status) {
                             setUploadStatus(data.status);
                         }
@@ -65,7 +68,8 @@ export function DocumentTable({ documents, onUploadSuccess }: DocumentTableProps
                             setUploadStatus('Error');
                         }
 
-                        if (data.status === 'completed') {
+                        if (data.status === 'Completed') {
+                            console.log("Uploading success");
                             onUploadSuccess?.();
                         }
                     });
@@ -92,40 +96,46 @@ export function DocumentTable({ documents, onUploadSuccess }: DocumentTableProps
         input.click();
     };
 
+    const handleDelete = async (documentId: string) => {
+        try {
+            const userId = 'dipak'; // Replace with actual user ID
+            console.log('Deleting document with id:', documentId);
+            const response = await sendDocumentDeleteRequest(userId, documentId);
+
+            onUploadSuccess?.();
+            console.log('Delete successful:', response);
+            // Optionally, update the UI or state to reflect the deletion
+        } catch (error) {
+            console.error('Error deleting document:', error);
+        }
+    };
+
     const columns = useMemo<MRT_ColumnDef<Document>[]>(
         () => [
             {
                 accessorKey: 'name',
                 header: 'Name',
-                size: isFullscreen ? 250 : 150,
+                size: isFullscreen ? 250 : 200,
                 Cell: ({ cell }) => (
                     <div style={{
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
-                        display: 'flex',
-                        alignItems: 'center',
-                        height: '100%',
-                        whiteSpace: 'pre-wrap',
+                        whiteSpace: 'normal',
                         wordBreak: 'break-word',
-                        paddingLeft: '16px'
                     }}>
                         {cell.getValue<string>()}
                     </div>
                 ),
             },
             {
-                accessorKey: 'type',
+                accessorKey: 'document_type',
                 header: 'Type',
-                size: isFullscreen ? 200 : 100,
+                size: isFullscreen ? 200 : 150,
                 Cell: ({ cell }) => (
                     <div style={{
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
-                        display: 'flex',
-                        alignItems: 'center',
-                        height: '100%',
-                        whiteSpace: 'pre-wrap',
-                        wordBreak: 'break-word',
+                        whiteSpace: 'nowrap',
                         fontSize: '0.9rem',
                         fontWeight: 600
                     }}>
@@ -190,6 +200,39 @@ export function DocumentTable({ documents, onUploadSuccess }: DocumentTableProps
                         </div>
                     );
                 },
+            },
+            {
+                accessorKey: '_id',
+                header: '',
+                size: 100,
+                Cell: ({ cell }) => (
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: '100%',
+                        width: '100%',
+                    }}>
+                        <IconButton
+                            aria-label="delete"
+                            onClick={() => handleDelete(cell.getValue<string>())}
+                            sx={{
+                                border: '1px solid rgba(0, 0, 0, 0.23)',
+                                borderRadius: '50%',
+                                padding: '4px',
+                                color: 'inherit',
+                                backgroundColor: 'transparent',
+                                '&:hover': {
+                                    backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                                    color: 'red',
+                                    borderColor: 'red',
+                                }
+                            }}
+                        >
+                            <DeleteIcon fontSize="small" />
+                        </IconButton>
+                    </div>
+                ),
             },
         ],
         [isFullscreen],
